@@ -7,7 +7,7 @@ use App\Models\Categoria;
 use Illuminate\Http\Request;
 use App\Http\Resources\CategoriaResource;
 use App\Http\Requests\StoreCategoriaRequest;
-
+use Illuminate\Support\Str;
 
 class CategoriaController extends Controller
 {
@@ -16,9 +16,21 @@ class CategoriaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $categorias = Categoria::all();
+
+        //Captura a coluna para ordenação
+        $sortParameter = $request->input('ordenacao','nome_da_categoria');
+        $sortDirection = Str::startsWith($sortParameter,'-') ? 'desc':'asc';
+        $sortColumn = ltrim($sortParameter,'-');
+
+        //Determina se faz a query ordenada ou aplica default
+        if($sortColumn == 'nome_da_categoria'){
+            $categorias = Categoria::orderBy('nomedacategoria', $sortDirection)->get();
+        }else{
+            $categorias = Categoria::all();
+        }
 
         return response() -> json([
             'status' => 200,
