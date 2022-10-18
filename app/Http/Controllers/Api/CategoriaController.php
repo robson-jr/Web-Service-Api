@@ -18,7 +18,7 @@ class CategoriaController extends Controller
      */
     public function index(Request $request)
     {
-        $categorias = Categoria::all();
+        /*$categorias = Categoria::all();
 
         //Captura a coluna para ordenação
         $sortParameter = $request->input('ordenacao','nome_da_categoria');
@@ -30,12 +30,15 @@ class CategoriaController extends Controller
             $categorias = Categoria::orderBy('nomedacategoria', $sortDirection)->get();
         }else{
             $categorias = Categoria::all();
-        }
+        }*/
+
+
+        $categoria = Categoria::all();
 
         return response() -> json([
             'status' => 200,
-            'mensagem' => 'Lista de categorias retornada',
-            'categorias' => CategoriaResource::collection($categorias)
+            'mensagem' => __("categoria.listreturn"),
+            'categorias' => CategoriaResource::collection($categoria)
         ],200);
     }
 
@@ -46,7 +49,7 @@ class CategoriaController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -82,7 +85,13 @@ class CategoriaController extends Controller
      */
     public function show(Categoria $categoria)
     {
-        //
+        $categoria = Categoria::find($categoria->pkcategoria);
+
+        return response() -> json([
+            'status' => 200,
+            'mensagem' => __("categoria.returned"),
+            'categorias' => CategoriaResource::collection($categoria)
+        ],200);
     }
 
     /**
@@ -107,12 +116,14 @@ class CategoriaController extends Controller
     {
         $categoria = Categoria::find($categoria->pkcategoria);
         $categoria->nomedacategoria = $request->nome_da_categoria;
+        
         $categoria->update();
 
         return response() -> json([
             'status' => 200,
-            'mensagem' => 'Categoria atualizada'
-        ], 200);
+            'mensagem' => __("categoria.update"),
+            'categorias' => CategoriaResource::collection($categoria)
+        ],200);
     }
 
     /**
@@ -127,7 +138,8 @@ class CategoriaController extends Controller
 
         return response() -> json([
             'status' => 200,
-            'mensagem' => 'Categoria apagada'
-        ], 200);
+            'mensagem' => __("categoria.deleted"),
+            'categorias' => CategoriaResource::collection($categoria)
+        ],200);
     }
 }
