@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\ProdutoController;
+use App\Http\Controllers\API\PassportAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +17,15 @@ use App\Http\Controllers\Api\ProdutoController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::post('register', [PassportAuthController::class, 'register']);
+Route::post('login', [PassportAuthController::class, 'login']);
+Route::post('logout', [PassportAuthController::class, 'logout'])->middleware('auth:api');
+Route::get('user', [PassportAuthController::class, 'userInfo'])->middleware('auth:api');
+
+/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
 
-Route::ApiResource('categorias', CategoriaController::class);
+Route::apiResource('categorias', CategoriaController::class)->middleware('auth:api');
 
-Route::ApiResource('produtos', ProdutoController::class);
+Route::apiResource('produtos', ProdutoController::class);
