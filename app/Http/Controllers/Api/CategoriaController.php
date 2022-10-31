@@ -16,6 +16,19 @@ class CategoriaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    /**
+     *      @OA\GET(
+     *      path="/api/categorias",
+     *      operationId="getCategoriasList",
+     *      tags={"Categorias"},
+     *      summary="retorna a lista de categorias",
+     *      description="Retorna o JSON da lista de categorias",
+     *      @OA\Response(
+     *      response=200,
+     *      description="Operação executada com sucesso"
+     *      )
+     * )
+     */
     public function index(Request $request)
     {
         $categorias = Categoria::all();
